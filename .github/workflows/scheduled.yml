@@ -44,7 +44,7 @@ jobs:
         run: (printf '[\n'; jq -c 'map(del(.tap_git_head,.tap,.installed_time,.installed,.ruby_source_path,.ruby_source_checksum))[]' raw.json | sed 's/^/\t/;s/$/,/' | sed '$ s/.$//'; printf ']\n') > cask.json && rm raw.json
 
       - name: Validate JSON
-        run: jq empty file.json 2>/dev/null || { echo "JSON is not valid" && exit 1 }
+        run: jq empty cask.json 2>/dev/null || { echo "JSON is not valid" && exit 1 }
 
       - name: Push changes
         uses: EndBug/add-and-commit@v9
