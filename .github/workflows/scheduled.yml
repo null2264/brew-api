@@ -1,0 +1,51 @@
+name: Update cask.json
+on:
+  push:
+    paths:
+      - .github/workflows/scheduled.yml
+  schedule:
+    # Every 15 minutes
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+
+env:
+  HOMEBREW_DEVELOPER: 1
+  HOMEBREW_NO_AUTO_UPDATE: 1
+  HOMEBREW_NO_ENV_HINTS: 1
+  HOMEBREW_BOOTSNAP: 1
+  HOMEBREW_NO_INSTALL_CLEANUP: 1
+
+jobs:
+  docs:
+    runs-on: macos-15
+    steps:
+      - name: Set up Homebrew
+        uses: Homebrew/actions/setup-homebrew@master
+        with:
+          core: false
+          cask: false
+          test-bot: false
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Generate cask.json
+        run: |
+          brew tap --force homebrew/cask
+          brew generate-cask-api
+          jq -n '[inputs]' _data/cask/*.json > raw.json
+
+      - name: Update data for homebrew/cask
+        run: (printf '[\n'; jq -c 'map(del(.tap_git_head,.tap,.installed_time,.installed,.ruby_source_path,.ruby_source_checksum))[]' raw.json | sed 's/^/\t/;s/$/,/' | head -c -2; printf '\n]\n') > cask.json && rm raw.json
+
+      - name: Push changes
+        uses: EndBug/add-and-commit@v9
+        with:
+          add: 'cask.json'
+          message: 'Update api output'
+          default_author: github_actions
