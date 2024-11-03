@@ -41,7 +41,7 @@ jobs:
           jq -n '[inputs]' _data/cask/*.json > raw.json
 
       - name: Update data for homebrew/cask
-        run: (printf '[\n'; jq -c 'map(del(.tap_git_head,.tap,.installed_time,.installed,.ruby_source_path,.ruby_source_checksum))[]' raw.json | sed 's/^/\t/;s/$/,/' | tail -c +1; printf '\n]\n') > cask.json && rm raw.json
+        run: (printf '[\n'; jq -c 'map(del(.tap_git_head,.tap,.installed_time,.installed,.ruby_source_path,.ruby_source_checksum))[]' raw.json | sed 's/^/\t/;s/$/,/' | sed '$ s/.$//'; printf ']\n') > cask.json && rm raw.json
 
       - name: Validate JSON
         run: jq empty file.json 2>/dev/null || { echo "JSON is not valid" && exit 1 }
