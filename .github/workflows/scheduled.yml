@@ -16,7 +16,7 @@ env:
   HOMEBREW_NO_INSTALL_CLEANUP: 1
 
 jobs:
-  docs:
+  update:
     runs-on: macos-15
     steps:
       - name: Set up Homebrew
