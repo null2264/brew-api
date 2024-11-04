@@ -3,4 +3,4 @@
 ## TODO
 
 - [x] Generate `cask.json`
-  - [ ] Support 3rd party taps
+  - [x] Support 3rd party taps
