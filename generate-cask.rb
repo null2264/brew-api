@@ -1,9 +1,13 @@
 #!/usr/bin/env brew ruby
-
-# Simplified version of `generate-cask-api` and `generate-cask`.
+#
+# Copyright (c) 2009-present, Homebrew contributors. All rights reserved.
+# SPDX-License-Identifier: BSD-2-Clause
+#
+# Simplified version of `generate-cask-api` and `generate-cask`
 #
 # REF: https://github.com/Homebrew/formulae.brew.sh/blob/998358b5d3d4e8710696e841d8fb195cebedd8dd/script/generate-cask.rb
 # REF: https://github.com/Homebrew/brew/blob/4d0deeb68e488fd2208c8a1058c506e70b182a63/Library/Homebrew/dev-cmd/generate-cask-api.rb#L47-L63
+#
 
 require "cask/cask"
 
