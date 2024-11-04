@@ -39,6 +39,8 @@ jobs:
           brew tap --force homebrew/cask
           brew tap --force nikitabobko/homebrew-tap
 
+          mkdir -p _data/cask
+
           brew ruby ./generate-cask.rb homebrew/cask
           brew ruby ./generate-cask.rb nikitabobko/homebrew-tap
           echo "`jq -n '[inputs]' _data/cask/*.json`" > raw.json
