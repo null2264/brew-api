@@ -1,0 +1,6 @@
+#!/bin/sh
+
+TAPS=(
+	homebrew-tap
+	nikitabobko/homebrew-tap
+)

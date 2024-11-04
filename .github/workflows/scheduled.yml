@@ -36,16 +36,23 @@ jobs:
 
       - name: Generate cask.json
         run: |
-          brew tap --force homebrew/cask
-          brew tap --force nikitabobko/homebrew-tap
-
+          # Clean up
+          rm -rf _data/cask
           mkdir -p _data/cask
 
-          brew ruby ./generate-cask.rb homebrew/cask
-          brew ruby ./generate-cask.rb nikitabobko/homebrew-tap
+          # Import taps
+          . taps
+
+          # Generate cask json files
+          for i in "${TAPS[@]}"; do
+            brew tap --force ${i}
+            brew ruby ./generate-cask.rb ${i}
+          done
+
+          # Merge cask json files to a single json file
           echo "`jq -n '[inputs]' _data/cask/*.json`" > raw.json
 
-      - name: Update data for homebrew/cask
+      - name: Simplify cask.json
         run: echo "`jq -c '[map(del(.tap_git_head,.tap,.installed_time,.installed,.ruby_source_path,.ruby_source_checksum))[]]' raw.json`" > cask.json && rm raw.json
 
       - name: Validate JSON
