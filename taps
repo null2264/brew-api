@@ -1,6 +1,6 @@
 #!/bin/sh
 
 TAPS=(
-	homebrew/casks
+	homebrew/cask
 	nikitabobko/homebrew-tap
 )
