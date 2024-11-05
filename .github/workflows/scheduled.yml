@@ -44,9 +44,15 @@ jobs:
           # Import taps
           . taps
 
-          # Generate cask json files
+          # Register all the taps
           for i in "${TAPS[@]}"; do
             brew tap --force ${i}
+          done
+
+          brew update
+
+          # Generate cask json files
+          for i in "${TAPS[@]}"; do
             brew ruby ./generate-cask.rb ${i}
           done
 
