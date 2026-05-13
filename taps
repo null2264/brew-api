@@ -4,5 +4,4 @@ TAPS=(
 	homebrew/cask
 	nikitabobko/homebrew-tap
 	Sikarugir-App/sikarugir
-	null2264/tap
 )
