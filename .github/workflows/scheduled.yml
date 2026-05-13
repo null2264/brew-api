@@ -4,6 +4,7 @@ on:
     paths:
       - .github/workflows/scheduled.yml
       - taps
+      - generate-cask.rb
   schedule:
     # Every 15 minutes
     - cron: "*/15 * * * *"
