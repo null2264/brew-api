@@ -6,8 +6,8 @@ on:
       - taps
       - generate-cask.rb
   schedule:
-    # Every 15 minutes
-    - cron: "*/15 * * * *"
+    # Every 60 minutes
+    - cron: "0 * * * *"
   workflow_dispatch:
 
 env:
