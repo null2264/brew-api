@@ -11,21 +11,32 @@
 
 require "cask/cask"
 
-tap_name = ARGV.first
+tap_name = ARGV.fetch(0) { abort "Usage: brew ruby generate-cask.rb <user/tap>" }
 tap = Tap.fetch(tap_name)
+abort "Tap '#{tap}' is not installed" unless tap.installed?
 
-Cask::Cask.generating_hash!
+errors = []
+generated = 0
 
-latest_macos = MacOSVersion.new(HOMEBREW_MACOS_NEWEST_SUPPORTED).to_sym
-default_arch = :intel  # NOTE: Change this to :arm if you want arm as default arch.
-Homebrew::SimulateSystem.with(os: latest_macos, arch: default_arch) do
-  tap.cask_files.each do |path|
-    cask = Cask::CaskLoader.load(path)
-    name = cask.token
-    json = JSON.pretty_generate(cask.to_hash_with_variations)
+Homebrew::API.with_no_api_env do
+  Cask::Cask.generating_hash!
 
-    IO.write("_data/cask/#{name}.json", "#{json}\n")
-  rescue => e
-    warn "Error while generating data for '#{path.stem}': #{e.message}"
+  latest_macos = MacOSVersion.new(HOMEBREW_MACOS_NEWEST_SUPPORTED).to_sym
+  Homebrew::SimulateSystem.with(os: latest_macos, arch: :arm) do
+    tap.cask_files.each do |path|
+      cask = Cask::CaskLoader.load(path)
+      json = JSON.pretty_generate(cask.to_hash_with_variations)
+
+      IO.write("_data/cask/#{cask.token}.json", "#{json}\n")
+      generated += 1
+    rescue => e
+      errors << path
+      warn "Error while generating data for '#{path.stem}': #{e.message}"
+    end
   end
 end
+
+abort "Failed to generate #{errors.length} cask(s) from #{tap}" if errors.any?
+abort "No casks found in #{tap}" if generated.zero?
+
+puts "Generated #{generated} cask(s) from #{tap}"
