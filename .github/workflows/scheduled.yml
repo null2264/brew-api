@@ -45,8 +45,8 @@ jobs:
           . taps
 
           # Register all the taps
-          for i in "${TAPS[@]}"; do
-            brew tap --force ${i}
+          for tap in "${TAPS[@]}"; do
+            brew tap --force ${tap}
             if [[ "$tap" != homebrew/* ]]; then
               # Homebrew 7 requires third-party taps to be trusted
               brew trust --tap "$tap"
