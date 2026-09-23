@@ -2,6 +2,6 @@
 
 TAPS=(
 	homebrew/cask
-	nikitabobko/homebrew-tap
+	nikitabobko/tap
 	Sikarugir-App/sikarugir
 )
